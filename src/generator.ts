@@ -7,20 +7,28 @@ import {
   TypeNode,
   Type
 } from 'ts-morph';
+import * as path from "node:path";
+
+type MockGeneratorOptions = {
+  filePath: string,
+  outputPath?: string,
+}
 
 class MockGenerator {
   private project: Project;
   private sourceFile: SourceFile;
   private generatedTypes: Set<string>;
-  private sourceFileName: string;
+  private sourcePath: string;
   private enums: Record<string, string[]>;
+  private outputPath: string;
 
-  constructor(filePath: string) {
+  constructor({ filePath, outputPath = 'generated_mocks.ts' }: MockGeneratorOptions) {
     this.project = new Project();
     this.sourceFile = this.project.addSourceFileAtPath(filePath);
     this.generatedTypes = new Set();
-    this.sourceFileName = filePath.replace(/\.ts$/, '');
+    this.sourcePath = filePath;
     this.enums = this.prepareEnums()
+    this.outputPath = outputPath;
   }
 
   private prepareEnums() {
@@ -53,13 +61,14 @@ class MockGenerator {
     });
     const imports = [fakerImport, this.prepareTypesImports(sourceDeclarationsNames)]
     output = imports.join('') + output;
+
+    fs.writeFileSync(this.outputPath, output);
     return output;
   }
 
   private prepareTypesImports(typesNames: string[]) {
-
     return `import { ${ typesNames.join(', ') } } from '${
-      this.sourceFileName
+      path.relative(path.dirname(this.outputPath), this.sourcePath)
     }';\n\n`
   }
 
@@ -73,8 +82,9 @@ class MockGenerator {
     }
     this.generatedTypes.add(name);
 
+    const overrideType = `Partial<${name}>`;
     let output = `export class ${name}Mock {\n`;
-    output += `  public static create(): ${name} {\n`;
+    output += `  public static create(overrides: ${overrideType} = {}): ${name} {\n`;
     output += `    return {\n`;
 
     if (declaration instanceof InterfaceDeclaration) {
@@ -98,6 +108,7 @@ class MockGenerator {
       }
     }
 
+    output += `      ...overrides\n`;
     output += `    };\n`;
     output += `  }\n`;
     output += `}\n\n`;
@@ -158,9 +169,10 @@ class MockGenerator {
 }
 
 // Usage
-const filePath = './data-contracts.ts';
-const generator = new MockGenerator(filePath);
-const output = generator.generate();
+const filePath = path.resolve(process.cwd(), './data-contracts.ts');
+const outputPath = path.resolve(process.cwd(), `./src/mocks.ts`);
+const generator = new MockGenerator({filePath, outputPath});
+generator.generate();
 
-fs.writeFileSync('generated_mocks.ts', output);
+
 console.log('Mock classes generated successfully!');
