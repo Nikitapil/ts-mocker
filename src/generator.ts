@@ -20,10 +20,13 @@ class MockGenerator {
     this.sourceFile = this.project.addSourceFileAtPath(filePath);
     this.generatedTypes = new Set();
     this.sourceFileName = filePath.replace(/\.ts$/, '');
-    this.enums = this.sourceFile.getEnums().reduce((acc: Record<string, string[]>, enumDeclaration) => {
+    this.enums = this.prepareEnums()
+  }
+
+  private prepareEnums() {
+    return this.sourceFile.getEnums().reduce((acc: Record<string, string[]>, enumDeclaration) => {
       const name = enumDeclaration.getName()
-      const members = enumDeclaration.getMembers().map(member => member.getName())
-      acc[name] = members
+      acc[name] = enumDeclaration.getMembers().map(member => member.getName())
       return acc
     }, {})
   }
@@ -105,23 +108,8 @@ class MockGenerator {
   private generateMockValue(typeNode: TypeNode | Type | undefined): string {
     if (!typeNode) return 'undefined';
 
-    if (typeNode instanceof TypeNode) {
-      const typeText = typeNode.getText();
-      console.log(typeText)
-      return this.handleTypeText(typeText);
-    } else {
-
-      // Handle ts.Type
-      // if (typeNode.isStringLiteral()) return `'${typeNode.getValue()}'`;
-      // if (typeNode.isNumberLiteral()) return typeNode.getValue().toString();
-      // if (typeNode.isBoolean()) return typeNode.isTrue() ? 'true' : 'false';
-      // if (typeNode.isEnumLiteral()) return `'${typeNode.getValue()}'`;
-
-
-      // For other types, try to get the text representation
-      const typeText = typeNode.getText();
-      return this.handleTypeText(typeText);
-    }
+    const typeText = typeNode.getText();
+    return this.handleTypeText(typeText);
   }
 
   private handleTypeText(typeText: string): string {
