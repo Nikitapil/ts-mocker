@@ -133,11 +133,31 @@ class MockGenerator {
     return output;
   }
 
-  private generateMockValue(typeNode: TypeNode | Type | undefined, typeName: string): string {
+  private generateMockValue(typeNode: TypeNode | Type | undefined, typeName: string, objectLevel = 1): string {
     if (!typeNode) return 'undefined';
 
     const typeText = typeNode.getText();
+
+    const type = typeNode instanceof TypeNode ? typeNode.getType() : typeNode;
+      // check literal object type
+      if (type.isObject?.() && !this.getExistingInterfaceOrType(typeText) && !global.hasOwnProperty(typeText)) {
+        let result = '{\n'
+        type.getProperties().forEach((prop) => {
+          // console.log(prop.getValueDeclaration()?.getType().isObject())
+          result+= `${' '.repeat(objectLevel)}       ${prop.getName()}: ${this.generateMockValue(
+            prop.getValueDeclaration()?.getType(),
+            prop.getName(),
+            objectLevel+2
+          )},\n`;
+        })
+        return result + `${' '.repeat(objectLevel)}      }`
+    }
     return this.handleTypeText(typeText, typeName);
+  }
+
+  private getExistingInterfaceOrType(typeText: string) {
+    return this.sourceFile.getInterface(typeText) ||
+      this.sourceFile.getTypeAlias(typeText)
   }
 
   private handleTypeText(typeText: string, typeName: string): string {
@@ -180,9 +200,7 @@ class MockGenerator {
         ) {
           // Generate the mock class for the nested type if not already generated
           if (!this.generatedTypes.has(typeText)) {
-            const nestedDeclaration =
-              this.sourceFile.getInterface(typeText) ||
-              this.sourceFile.getTypeAlias(typeText);
+            const nestedDeclaration = this.getExistingInterfaceOrType(typeText)
             if (nestedDeclaration) {
               this.generateMockClass(nestedDeclaration);
             }

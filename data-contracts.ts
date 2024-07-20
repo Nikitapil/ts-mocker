@@ -28,10 +28,20 @@ export interface CreateUserDto {
 
   isAdmin: boolean;
 
-  // children: {
-  //   males: number,
-  //   girls: number
-  // }
+  children: {
+    males: number,
+    girls: number,
+
+    youngest: {
+      age: number,
+      name: string,
+      contacts: {
+        email: string,
+        username: string,
+        birthday: Date,
+      }
+    }
+  }
 }
 
 export enum UserRolesEnum {
