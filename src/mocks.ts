@@ -1,37 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { UserRolesEnum, Key, Message, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto } from '../data-contracts.ts';
-
-export class KeyMock {
-  public static create(overrides: Partial<Key> = {}): Key {
-    return {
-      id: faker.number.int(),
-      value: faker.lorem.word(),
-      ...overrides
-    };
-  }
-}
-
-export class MessageMock {
-  public static create(overrides: Partial<Message> = {}): Message {
-    return {
-      name: faker.lorem.word(),
-      title: faker.lorem.word(),
-      paths: [faker.lorem.word(), faker.lorem.word()],
-      nestedKey: KeyMock.create(),
-      superNestedKey: {
-        id: faker.number.int(),
-        key: {
-          key: {
-            id: faker.number.int(),
-            value: faker.lorem.word(),
-           },
-         },
-       },
-      ...overrides
-    };
-  }
-}
+import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
 
 export class CreateUserDtoMock {
   public static create(overrides: Partial<CreateUserDto> = {}): CreateUserDto {
@@ -116,6 +85,50 @@ export class RestorePasswordDtoMock {
     return {
       key: faker.lorem.word(),
       password: faker.lorem.word(),
+      ...overrides
+    };
+  }
+}
+
+export class KeyMock {
+  public static create(overrides: Partial<Key> = {}): Key {
+    return {
+      id: faker.number.int(),
+      value: faker.lorem.word(),
+      ...overrides
+    };
+  }
+}
+
+export class NestedKeyMock {
+  public static create(overrides: Partial<NestedKey> = {}): NestedKey {
+    return {
+      key: KeyMock.create(),
+      ...overrides
+    };
+  }
+}
+
+export class SuperNestedKeyMock {
+  public static create(overrides: Partial<SuperNestedKey> = {}): SuperNestedKey {
+    return {
+      id: faker.number.int(),
+      key: NestedKeyMock.create(),
+      ...overrides
+    };
+  }
+}
+
+export class MessageMock {
+  public static create(overrides: Partial<Message> = {}): Message {
+    return {
+      name: faker.lorem.word(),
+      title: faker.lorem.word(),
+      paths: [faker.lorem.word(), faker.lorem.word()],
+      nestedKey: KeyMock.create(),
+      superNestedKey: {
+        ket: NestedKeyMock.create(),
+       },
       ...overrides
     };
   }

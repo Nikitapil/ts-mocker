@@ -45,6 +45,13 @@ class MockGenerator {
     }
   }
 
+  private getCleanTypeText(typeText: string): string {
+    if (typeText.startsWith('import') && typeText.includes('.')) {
+      typeText = typeText.split('.')[1];
+    }
+    return typeText
+  }
+
   private prepareEnums() {
     return this.sourceFile.getEnums().reduce((acc: Record<string, string[]>, enumDeclaration) => {
       const name = enumDeclaration.getName()
@@ -161,7 +168,7 @@ class MockGenerator {
   }
 
   private getExistingInterfaceOrType(typeText: string) {
-    console.log(typeText)
+    typeText = this.getCleanTypeText(typeText)
     return this.sourceFile.getInterface(typeText) ||
       this.sourceFile.getTypeAlias(typeText)
   }
@@ -201,10 +208,9 @@ class MockGenerator {
         }
         // Check if it's a nested type from the same file
         if (
-          this.sourceFile.getInterface(typeText) ||
-          this.sourceFile.getTypeAlias(typeText)
+          this.getExistingInterfaceOrType(typeText)
         ) {
-          return `${typeText}Mock.create()`;
+          return `${this.getCleanTypeText(typeText)}Mock.create()`;
         }
         return 'undefined'; // For unknown types
     }

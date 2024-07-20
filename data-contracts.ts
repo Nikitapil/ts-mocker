@@ -9,21 +9,26 @@
  * ---------------------------------------------------------------
  */
 
-export interface Key {
+export type Key = {
   id: number
   value: string
 }
+export type NestedKey = {
+  key: Key
+}
 
-export interface Message {
+export type SuperNestedKey = {
+  id: number,
+  key: NestedKey
+}
+
+export type Message = {
   name: string;
   title: string;
   paths: string[];
   nestedKey: Key;
   superNestedKey: {
-    id: number;
-    key: {
-      key: Key
-    };
+    ket: NestedKey
   }
 }
 
