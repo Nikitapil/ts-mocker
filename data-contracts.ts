@@ -9,6 +9,24 @@
  * ---------------------------------------------------------------
  */
 
+export interface Key {
+  id: number
+  value: string
+}
+
+export interface Message {
+  name: string;
+  title: string;
+  paths: string[];
+  nestedKey: Key;
+  superNestedKey: {
+    id: number;
+    key: {
+      key: Key
+    };
+  }
+}
+
 export interface CreateUserDto {
   /**
    * user email
@@ -27,6 +45,14 @@ export interface CreateUserDto {
   username: string;
 
   isAdmin: boolean;
+
+  // dates: Date[];
+
+  texts: string[];
+
+  keys: Key[];
+
+  messages: Message[];
 
   children: {
     males: number,

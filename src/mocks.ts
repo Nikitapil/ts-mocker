@@ -1,6 +1,37 @@
 import { faker } from '@faker-js/faker';
 
-import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto } from '../data-contracts.ts';
+import { UserRolesEnum, Key, Message, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto } from '../data-contracts.ts';
+
+export class KeyMock {
+  public static create(overrides: Partial<Key> = {}): Key {
+    return {
+      id: faker.number.int(),
+      value: faker.lorem.word(),
+      ...overrides
+    };
+  }
+}
+
+export class MessageMock {
+  public static create(overrides: Partial<Message> = {}): Message {
+    return {
+      name: faker.lorem.word(),
+      title: faker.lorem.word(),
+      paths: [faker.lorem.word(), faker.lorem.word()],
+      nestedKey: KeyMock.create(),
+      superNestedKey: {
+        id: faker.number.int(),
+        key: {
+          key: {
+            id: faker.number.int(),
+            value: faker.lorem.word(),
+           },
+         },
+       },
+      ...overrides
+    };
+  }
+}
 
 export class CreateUserDtoMock {
   public static create(overrides: Partial<CreateUserDto> = {}): CreateUserDto {
@@ -9,6 +40,9 @@ export class CreateUserDtoMock {
       password: faker.lorem.word(),
       username: faker.lorem.word(),
       isAdmin: faker.datatype.boolean(),
+      texts: [faker.lorem.word(), faker.lorem.word()],
+      keys: [KeyMock.create(), KeyMock.create()],
+      messages: [MessageMock.create(), MessageMock.create()],
       children: {
         males: faker.number.int(),
         girls: faker.number.int(),
