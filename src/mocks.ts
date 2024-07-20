@@ -6,8 +6,8 @@ export class CreateUserDtoMock {
   public static create(overrides: Partial<CreateUserDto> = {}): CreateUserDto {
     return {
       email: faker.internet.email(),
-      password: faker.lorem.word(),
-      username: faker.lorem.word(),
+      password: faker.lorem.paragraph(),
+      username: faker.lorem.paragraph(),
       isAdmin: faker.datatype.boolean(),
       ...overrides
     };
@@ -19,7 +19,7 @@ export class UserReturnDtoMock {
     return {
       id: faker.number.int(),
       email: faker.internet.email(),
-      username: faker.lorem.word(),
+      username: faker.lorem.paragraph(),
       role: UserRolesEnum.User,
       ...overrides
     };
@@ -29,7 +29,7 @@ export class UserReturnDtoMock {
 export class AuthResponseDtoMock {
   public static create(overrides: Partial<AuthResponseDto> = {}): AuthResponseDto {
     return {
-      accessToken: faker.lorem.word(),
+      accessToken: faker.lorem.paragraph(),
       user: UserReturnDtoMock.create(),
       ...overrides
     };
@@ -40,7 +40,7 @@ export class LoginUserDtoMock {
   public static create(overrides: Partial<LoginUserDto> = {}): LoginUserDto {
     return {
       email: faker.internet.email(),
-      password: faker.lorem.word(),
+      password: faker.lorem.paragraph(),
       ...overrides
     };
   }
@@ -49,7 +49,7 @@ export class LoginUserDtoMock {
 export class SuccessMessageDtoMock {
   public static create(overrides: Partial<SuccessMessageDto> = {}): SuccessMessageDto {
     return {
-      message: faker.lorem.word(),
+      message: faker.lorem.paragraph(),
       ...overrides
     };
   }
@@ -67,8 +67,8 @@ export class GetRestoreKeyDtoMock {
 export class RestorePasswordDtoMock {
   public static create(overrides: Partial<RestorePasswordDto> = {}): RestorePasswordDto {
     return {
-      key: faker.lorem.word(),
-      password: faker.lorem.word(),
+      key: faker.lorem.paragraph(),
+      password: faker.lorem.paragraph(),
       ...overrides
     };
   }

@@ -13,6 +13,7 @@ type MockGeneratorOptions = {
   filePath: string,
   outputPath?: string,
   propertiesRules?: Record<string, string>
+  typeRules?: Record<string, string>
 }
 
 class MockGenerator {
@@ -25,8 +26,9 @@ class MockGenerator {
   private propertiesRules: Record<string, string> = {
     email: 'faker.internet.email()'
   };
+  private typeRules: Record<string, string> = {}
 
-  constructor({ filePath, outputPath = 'generated_mocks.ts', propertiesRules = {} }: MockGeneratorOptions) {
+  constructor({ filePath, outputPath = 'generated_mocks.ts', propertiesRules = {}, typeRules = {} }: MockGeneratorOptions) {
     this.project = new Project();
     this.sourceFile = this.project.addSourceFileAtPath(filePath);
     this.generatedTypes = new Set();
@@ -36,6 +38,10 @@ class MockGenerator {
     this.propertiesRules = {
       ...this.propertiesRules,
       ...propertiesRules
+    }
+    this.typeRules = {
+      ...this.typeRules,
+      ...typeRules
     }
   }
 
@@ -135,12 +141,16 @@ class MockGenerator {
   }
 
   private handleTypeText(typeText: string, typeName: string): string {
-    if (this.enums[typeText]) {
-      return `${typeText}.${this.enums[typeText][0]}`
-    }
-
     if (this.propertiesRules.hasOwnProperty(typeName)) {
       return this.propertiesRules[typeName]
+    }
+
+    if (this.typeRules.hasOwnProperty(typeText)) {
+      return this.typeRules[typeText];
+    }
+
+    if (this.enums[typeText]) {
+      return `${typeText}.${this.enums[typeText][0]}`
     }
 
     switch (typeText) {
@@ -187,7 +197,7 @@ class MockGenerator {
 // Usage
 const filePath = path.resolve(process.cwd(), './data-contracts.ts');
 const outputPath = path.resolve(process.cwd(), `./src/mocks.ts`);
-const generator = new MockGenerator({filePath, outputPath});
+const generator = new MockGenerator({filePath, outputPath });
 generator.generate();
 
 
