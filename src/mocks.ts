@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
+import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, UserStatus, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
 
 export class CreateUserDtoMock {
   public static create(overrides: Partial<CreateUserDto> = {}): CreateUserDto {
@@ -9,6 +9,12 @@ export class CreateUserDtoMock {
       password: faker.lorem.word(),
       username: faker.lorem.word(),
       isAdmin: faker.datatype.boolean(),
+      status: UserStatusMock.create(),
+      statuses: [UserStatusMock.create(), UserStatusMock.create()],
+      nestedStatus: {
+        status: UserStatusMock.create(),
+       },
+      dates: [faker.date.recent(), faker.date.recent()],
       texts: [faker.lorem.word(), faker.lorem.word()],
       keys: [KeyMock.create(), KeyMock.create()],
       messages: [MessageMock.create(), MessageMock.create()],
@@ -88,6 +94,13 @@ export class RestorePasswordDtoMock {
       ...overrides
     };
   }
+}
+
+
+export class UserStatusMock {
+  public static create(override: UserStatus = "active"): UserStatus {
+    return override
+   }
 }
 
 export class KeyMock {

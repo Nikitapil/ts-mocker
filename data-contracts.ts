@@ -9,6 +9,8 @@
  * ---------------------------------------------------------------
  */
 
+export type UserStatus = 'active' | 'inactive' | 'archived' | 'blocked';
+
 export type Key = {
   id: number
   value: string
@@ -51,7 +53,15 @@ export interface CreateUserDto {
 
   isAdmin: boolean;
 
-  // dates: Date[];
+  status: UserStatus
+
+  statuses: UserStatus[]
+
+  nestedStatus: {
+    status: UserStatus
+  }
+
+  dates: Date[];
 
   texts: string[];
 

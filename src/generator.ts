@@ -93,6 +93,21 @@ class MockGenerator {
     }';\n\n`
   }
 
+  private generateUnionMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
+    const unions = declaration.getType().getUnionTypes().map(t => t.getText())
+    const name = declaration.getName();
+    if (!unions.length) {
+      throw new Error('Not unions in the type')
+    }
+    return `
+export class ${name}Mock {
+  public static create(override: ${name} = ${unions[0]}): ${name} {
+    return override
+   }
+}\n
+`
+  }
+
 
   private generateMockClass(
     declaration: InterfaceDeclaration | TypeAliasDeclaration
@@ -104,6 +119,9 @@ class MockGenerator {
     this.generatedTypes.add(name);
 
     const overrideType = `Partial<${name}>`;
+    if (declaration.getType().isUnion()) {
+      return this.generateUnionMockClass(declaration);
+    }
     let output = `export class ${name}Mock {\n`;
     output += `  public static create(overrides: ${overrideType} = {}): ${name} {\n`;
     output += `    return {\n`;
