@@ -12,6 +12,7 @@ import * as path from "node:path";
 type MockGeneratorOptions = {
   filePath: string,
   outputPath?: string,
+  propertiesRules?: Record<string, string>
 }
 
 class MockGenerator {
@@ -21,14 +22,21 @@ class MockGenerator {
   private sourcePath: string;
   private enums: Record<string, string[]>;
   private outputPath: string;
+  private propertiesRules: Record<string, string> = {
+    email: 'faker.internet.email()'
+  };
 
-  constructor({ filePath, outputPath = 'generated_mocks.ts' }: MockGeneratorOptions) {
+  constructor({ filePath, outputPath = 'generated_mocks.ts', propertiesRules = {} }: MockGeneratorOptions) {
     this.project = new Project();
     this.sourceFile = this.project.addSourceFileAtPath(filePath);
     this.generatedTypes = new Set();
     this.sourcePath = filePath;
     this.enums = this.prepareEnums()
     this.outputPath = outputPath;
+    this.propertiesRules = {
+      ...this.propertiesRules,
+      ...propertiesRules
+    }
   }
 
   private prepareEnums() {
@@ -90,7 +98,8 @@ class MockGenerator {
     if (declaration instanceof InterfaceDeclaration) {
       declaration.getProperties().forEach((prop) => {
         output += `      ${prop.getName()}: ${this.generateMockValue(
-          prop.getTypeNode(), 
+          prop.getTypeNode(),
+          prop.getName()
         )},\n`;
       });
     } else {
@@ -98,12 +107,14 @@ class MockGenerator {
       if (type.isObject()) {
         type.getProperties().forEach((prop) => {
           output += `      ${prop.getName()}: ${this.generateMockValue(
-            prop.getValueDeclaration()?.getType()
+            prop.getValueDeclaration()?.getType(),
+            prop.getName()
           )},\n`;
         });
       } else {
         output += `      ${this.generateMockValue(
-          declaration.getTypeNode()
+          declaration.getTypeNode(),
+          declaration.getTypeNode()?.getText() || ''
         )}\n`;
       }
     }
@@ -116,16 +127,20 @@ class MockGenerator {
     return output;
   }
 
-  private generateMockValue(typeNode: TypeNode | Type | undefined): string {
+  private generateMockValue(typeNode: TypeNode | Type | undefined, typeName: string): string {
     if (!typeNode) return 'undefined';
 
     const typeText = typeNode.getText();
-    return this.handleTypeText(typeText);
+    return this.handleTypeText(typeText, typeName);
   }
 
-  private handleTypeText(typeText: string): string {
+  private handleTypeText(typeText: string, typeName: string): string {
     if (this.enums[typeText]) {
       return `${typeText}.${this.enums[typeText][0]}`
+    }
+
+    if (this.propertiesRules.hasOwnProperty(typeName)) {
+      return this.propertiesRules[typeName]
     }
 
     switch (typeText) {
@@ -143,7 +158,8 @@ class MockGenerator {
             .replace('Array<', '')
             .replace('[]', '')
             .replace('>', '');
-          return `[${this.handleTypeText(innerType)}, ${this.handleTypeText(
+          return `[${this.handleTypeText(innerType, innerType)}, ${this.handleTypeText(
+            innerType,
             innerType
           )}]`;
         }

@@ -27,6 +27,11 @@ export interface CreateUserDto {
   username: string;
 
   isAdmin: boolean;
+
+  // children: {
+  //   males: number,
+  //   girls: number
+  // }
 }
 
 export enum UserRolesEnum {

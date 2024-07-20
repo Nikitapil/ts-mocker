@@ -5,7 +5,7 @@ import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUser
 export class CreateUserDtoMock {
   public static create(overrides: Partial<CreateUserDto> = {}): CreateUserDto {
     return {
-      email: faker.lorem.word(),
+      email: faker.internet.email(),
       password: faker.lorem.word(),
       username: faker.lorem.word(),
       isAdmin: faker.datatype.boolean(),
@@ -18,7 +18,7 @@ export class UserReturnDtoMock {
   public static create(overrides: Partial<UserReturnDto> = {}): UserReturnDto {
     return {
       id: faker.number.int(),
-      email: faker.lorem.word(),
+      email: faker.internet.email(),
       username: faker.lorem.word(),
       role: UserRolesEnum.User,
       ...overrides
@@ -39,7 +39,7 @@ export class AuthResponseDtoMock {
 export class LoginUserDtoMock {
   public static create(overrides: Partial<LoginUserDto> = {}): LoginUserDto {
     return {
-      email: faker.lorem.word(),
+      email: faker.internet.email(),
       password: faker.lorem.word(),
       ...overrides
     };
@@ -58,7 +58,7 @@ export class SuccessMessageDtoMock {
 export class GetRestoreKeyDtoMock {
   public static create(overrides: Partial<GetRestoreKeyDto> = {}): GetRestoreKeyDto {
     return {
-      email: faker.lorem.word(),
+      email: faker.internet.email(),
       ...overrides
     };
   }
