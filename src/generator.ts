@@ -17,25 +17,35 @@ type MockGeneratorOptions = {
   typeRules?: Record<string, string>
 }
 
-class MockGenerator {
+export class MockGenerator {
   private project: Project;
   private sourceFile: SourceFile;
   private generatedTypes: Set<string>;
-  private sourcePath: string;
-  private enums: Record<string, string[]>;
-  private outputPath: string;
-  private propertiesRules: Record<string, string> = {
+  private readonly sourcePath: string;
+  private readonly enums: Record<string, string[]>;
+  private readonly outputPath: string;
+  private readonly propertiesRules: Record<string, string> = {
     email: 'faker.internet.email()'
   };
-  private typeRules: Record<string, string> = {}
+  private readonly typeRules: Record<string, string> = {
+    string: 'faker.lorem.word()',
+    number: 'faker.number.int()',
+    Date: 'faker.date.recent()',
+    boolean: 'faker.datatype.boolean()',
+    BigInt: 'faker.number.bigInt()',
+    null: 'null',
+    undefined: 'undefined',
+    any: 'undefined',
+    unknown: 'undefined',
+  }
 
   constructor({ filePath, outputPath = 'generated_mocks.ts', propertiesRules = {}, typeRules = {} }: MockGeneratorOptions) {
     this.project = new Project();
     this.sourceFile = this.project.addSourceFileAtPath(filePath);
     this.generatedTypes = new Set();
     this.sourcePath = filePath;
-    this.enums = this.prepareEnums()
     this.outputPath = outputPath;
+    this.enums = this.prepareEnums();
     this.propertiesRules = {
       ...this.propertiesRules,
       ...propertiesRules
@@ -283,26 +293,6 @@ export class ${name}Mock {
       return result === 'undefined' ? textType : result
     }
 
-    switch (typeText) {
-      case 'string':
-        return 'faker.lorem.word()';
-      case 'number':
-        return 'faker.number.int()';
-      case 'boolean':
-        return 'faker.datatype.boolean()';
-      case 'Date':
-        return 'faker.date.recent()';
-      case 'null':
-        return 'null';
-      case 'undefined':
-        return 'undefined';
-      case 'any':
-        return 'undefined';
-      case 'unknown':
-        return 'undefined';
-      case 'BigInt':
-        return 'faker.number.bigInt()';
-      default:
         if (typeText.startsWith('Array<') || typeText.endsWith('[]')) {
           const innerType = typeText
             .replace('Array<', '')
@@ -320,7 +310,6 @@ export class ${name}Mock {
           return `${this.getCleanTypeText(typeText)}Mock.create()`;
         }
         return typeText; // For unknown types
-    }
   }
 }
 
