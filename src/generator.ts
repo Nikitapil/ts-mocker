@@ -94,7 +94,7 @@ class MockGenerator {
   }
 
   private prepareTypesImports(typesNames: string[]) {
-    return `import { ${ typesNames.join(', ') } } from '${
+    return `import { \n  ${ typesNames.join(',\n  ') } \n} from '${
       path.relative(path.dirname(this.outputPath), this.sourcePath)
     }';\n\n`
   }
@@ -180,7 +180,8 @@ export class ${name}Mock {
         declaration.getType().isBoolean() ||
         declaration.getType().isEnum() ||
         declaration.getType().isAny() ||
-        declaration.getType().isBigInt()
+        declaration.getType().isBigInt() ||
+        declaration.getType().isUnknown()
       ) {
       return this.generateTypeClass(declaration)
     }
@@ -244,6 +245,7 @@ export class ${name}Mock {
     const typeText = this.getCleanTypeText(typeNode.getText());
 
     const type = typeNode instanceof TypeNode ? typeNode.getType() : typeNode;
+
       // check literal object type
       if (type.isObject?.() && !this.getExistingInterfaceOrType(typeText) && !this.isGlobalType(typeText) && !type.isArray()) {
         let result = '{\n'
@@ -298,6 +300,8 @@ export class ${name}Mock {
       case 'undefined':
         return 'undefined';
       case 'any':
+        return 'undefined';
+      case 'unknown':
         return 'undefined';
       case 'BigInt':
         return 'faker.number.bigInt()';

@@ -1,6 +1,39 @@
 import { faker } from '@faker-js/faker';
 
-import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, UserStatus, YesType, NoType, Bool, WordType, NumberType, NumberUnionType, StringLiteral, RandomUn, ArrType, HardUnionType, DateType, StringType, StrOrNum, numberTypeNative, EnumType, AnyType, BigIntType, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
+import { 
+  UserRolesEnum,
+  CreateUserDto,
+  UserReturnDto,
+  AuthResponseDto,
+  LoginUserDto,
+  SuccessMessageDto,
+  GetRestoreKeyDto,
+  RestorePasswordDto,
+  UserStatus,
+  YesType,
+  NoType,
+  Bool,
+  WordType,
+  NumberType,
+  NumberUnionType,
+  StringLiteral,
+  RandomUn,
+  ArrType,
+  HardUnionType,
+  DateType,
+  StringType,
+  StrOrNum,
+  numberTypeNative,
+  EnumType,
+  AnyType,
+  BigIntType,
+  ClassType,
+  UnknownType,
+  Key,
+  NestedKey,
+  SuperNestedKey,
+  Message 
+} from '../data-contracts.ts';
 
 export class CreateUserDtoMock {
   public static create(overrides: Partial<CreateUserDto> = {}): CreateUserDto {
@@ -28,6 +61,11 @@ export class CreateUserDtoMock {
       statuses: [UserStatusMock.create(), UserStatusMock.create()],
       nullable: null,
       nullableOrUndefined: undefined,
+      welcome: {
+        welcome: faker.lorem.word(),
+       },
+      classType: ClassTypeMock.create(),
+      unknownField: undefined,
       nestedStatus: {
         status: UserStatusMock.create(),
        },
@@ -235,6 +273,22 @@ export class AnyTypeMock {
 
 export class BigIntTypeMock {
   public static create(override: BigIntType = faker.number.bigInt()): BigIntType {
+    return override
+   }
+}
+
+export class ClassTypeMock {
+  public static create(overrides: Partial<ClassType> = {}): ClassType {
+    return {
+      welcome: faker.lorem.word(),
+      ...overrides
+    };
+  }
+}
+
+
+export class UnknownTypeMock {
+  public static create(override: UnknownType = undefined): UnknownType {
     return override
    }
 }

@@ -1,13 +1,6 @@
-/* eslint-disable */
-/* tslint:disable */
-/*
- * ---------------------------------------------------------------
- * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
- * ##                                                           ##
- * ## AUTHOR: acacode                                           ##
- * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
- * ---------------------------------------------------------------
- */
+class WelcomeClass {
+  welcome = 'welcome';
+}
 
 export type UserStatus = 'active' | 'inactive' | 'archived' | 'blocked';
 
@@ -28,6 +21,8 @@ export type numberTypeNative = number
 export type EnumType = UserRolesEnum
 export type AnyType = any
 export type BigIntType = BigInt
+export type ClassType = WelcomeClass
+export type UnknownType = unknown
 
 export type Key = {
   id: number
@@ -110,6 +105,12 @@ export interface CreateUserDto {
   nullable: null
 
   nullableOrUndefined: undefined | null
+
+  welcome: WelcomeClass
+
+  classType: ClassType
+
+  unknownField: unknown
 
   nestedStatus: {
     status: UserStatus
