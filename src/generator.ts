@@ -110,13 +110,7 @@ export class MockGenerator {
   private generateTypeClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
     const name = declaration.getName();
     const value = this.generateMockValue(declaration.getType(), name)
-    return `
-export class ${name}Mock {
-  public static create(override: ${name} = ${value}): ${name} {
-    return override
-   }
-}
-`
+    return getTypeClassTemplate(name, value)
   }
 
   private generateTemplateLiteralMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
@@ -124,13 +118,7 @@ export class ${name}Mock {
     const name = declaration.getName();
     const value = replaceBracketValues(type.getText(), (val) => this.handleTypeText(val, name))
 
-    return `
-export class ${name}Mock {
-  public static create(override: ${name} = ${value}): ${name} {
-    return override
-   }
-}
-`
+    return getTypeClassTemplate(name, value)
   }
 
   private generateArrayTypeMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
