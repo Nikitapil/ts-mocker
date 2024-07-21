@@ -21,6 +21,8 @@ export type StringLiteral = `${string}Qwe${number}`
 export type RandomUn = YesType | NoType
 export type ArrType = NumberUnionType[]
 export type HardUnionType = Message | SuccessMessageDto
+export type DateType = Date
+// export type StringType = string
 
 export type Key = {
   id: number
@@ -64,9 +66,45 @@ export interface CreateUserDto {
 
   isAdmin: boolean;
 
+  stringOrNum: string | number
+
+  keyOrNestedKey: Key | NestedKey
+
+  yes: YesType
+
+  no: NoType
+
+  bool: Bool
+
+  word: WordType
+
+  num: NumberType
+
+  numUnion: NumberUnionType
+
+  stringOr: 'hello' | 'world'
+
+  stringLiteralNested: 'stringLiteral'
+
+  stringLiteral: StringLiteral
+
+  randomUnion: RandomUn
+
+  arrType: ArrType
+
+  dateTyped: DateType
+
+  // stringTyped: StringType
+
+  hardUnion: HardUnionType
+
   status: UserStatus
 
   statuses: UserStatus[]
+
+  nullable: null
+
+  nullableOrUndefined: undefined | null
 
   nestedStatus: {
     status: UserStatus

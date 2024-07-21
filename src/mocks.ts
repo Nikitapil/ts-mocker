@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, UserStatus, YesType, NoType, Bool, WordType, NumberType, NumberUnionType, StringLiteral, RandomUn, ArrType, HardUnionType, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
+import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, UserStatus, YesType, NoType, Bool, WordType, NumberType, NumberUnionType, StringLiteral, RandomUn, ArrType, HardUnionType, DateType, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
 
 export class CreateUserDtoMock {
   public static create(overrides: Partial<CreateUserDto> = {}): CreateUserDto {
@@ -9,8 +9,25 @@ export class CreateUserDtoMock {
       password: faker.lorem.word(),
       username: faker.lorem.word(),
       isAdmin: faker.datatype.boolean(),
+      stringOrNum: faker.lorem.word(),
+      keyOrNestedKey: KeyMock.create(),
+      yes: YesTypeMock.create(),
+      no: NoTypeMock.create(),
+      bool: BoolMock.create(),
+      word: WordTypeMock.create(),
+      num: NumberTypeMock.create(),
+      numUnion: NumberUnionTypeMock.create(),
+      stringOr: 'hello',
+      stringLiteralNested: 'stringLiteral',
+      stringLiteral: StringLiteralMock.create(),
+      randomUnion: RandomUnMock.create(),
+      arrType: ArrTypeMock.create(),
+      dateTyped: DateTypeMock.create(),
+      hardUnion: HardUnionTypeMock.create(),
       status: UserStatusMock.create(),
       statuses: [UserStatusMock.create(), UserStatusMock.create()],
+      nullable: null,
+      nullableOrUndefined: undefined,
       nestedStatus: {
         status: UserStatusMock.create(),
        },
@@ -169,6 +186,13 @@ export class ArrTypeMock {
 
 export class HardUnionTypeMock {
   public static create(override: HardUnionType = MessageMock.create()): HardUnionType {
+    return override
+   }
+}
+
+
+export class DateTypeMock {
+  public static create(override: DateType = faker.date.recent()): DateType {
     return override
    }
 }

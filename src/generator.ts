@@ -134,6 +134,17 @@ export class ${name}Mock {
 `
   }
 
+  private generateDateMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
+    const name = declaration.getName();
+    return `
+export class ${name}Mock {
+  public static create(override: ${name} = faker.date.recent()): ${name} {
+    return override
+   }
+}\n
+`
+  }
+
   private generateTemplateLiteralMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
     const type = declaration.getType();
     const name = declaration.getName();
@@ -178,7 +189,7 @@ export class ${name}Mock {
       return this.generateTemplateLiteralMockClass(declaration)
     }
 
-    if (declaration.getType().isLiteral()) {
+    if (declaration.getType().isLiteral() || declaration.getType().isString()) {
       return this.generateLiteralMockClass(declaration)
     }
 
@@ -200,6 +211,9 @@ export class ${name}Mock {
       });
     } else {
       const type = declaration.getType();
+      if (type.getText() === 'Date') {
+        return this.generateDateMockClass(declaration)
+      }
       if (type.isObject()) {
         type.getProperties().forEach((prop) => {
           output += `      ${prop.getName()}: ${this.generateMockValue(
@@ -269,6 +283,12 @@ export class ${name}Mock {
       return `${typeText}.${this.enums[typeText][0]}`
     }
 
+    if (typeText.includes('|')) {
+      const textType = typeText.split('|')[0].trim();
+      const result = this.handleTypeText(textType, typeName)
+      return result === 'undefined' ? textType : result
+    }
+
     switch (typeText) {
       case 'string':
         return 'faker.lorem.word()';
@@ -278,6 +298,10 @@ export class ${name}Mock {
         return 'faker.datatype.boolean()';
       case 'Date':
         return 'faker.date.recent()';
+      case 'null':
+        return 'null';
+      case 'undefined':
+        return 'undefined';
       default:
         if (typeText.startsWith('Array<') || typeText.endsWith('[]')) {
           const innerType = typeText
@@ -295,7 +319,7 @@ export class ${name}Mock {
         ) {
           return `${this.getCleanTypeText(typeText)}Mock.create()`;
         }
-        return 'undefined'; // For unknown types
+        return typeText; // For unknown types
     }
   }
 }
