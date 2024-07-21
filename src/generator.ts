@@ -120,25 +120,26 @@ export class MockGenerator {
     declaration: InterfaceDeclaration | TypeAliasDeclaration
   ): string {
     const name = declaration.getName();
+    const type = declaration.getType();
 
-    if (declaration.getType().isArray()) {
+    if (type.isArray()) {
         return this.generateArrayTypeMockClass(declaration)
     }
 
-    if (declaration.getType().isLiteral() ||
-        declaration.getType().isString() ||
-        declaration.getType().isNumber() ||
-        declaration.getType().isBoolean() ||
-        declaration.getType().isEnum() ||
-        declaration.getType().isAny() ||
-        declaration.getType().isBigInt() ||
-        declaration.getType().isUnknown() ||
-        declaration.getType().isTemplateLiteral()
+    if (type.isLiteral() ||
+        type.isString() ||
+        type.isNumber() ||
+        type.isBoolean() ||
+        type.isEnum() ||
+        type.isAny() ||
+        type.isBigInt() ||
+        type.isUnknown() ||
+        type.isTemplateLiteral()
       ) {
       return this.generateTypeClass(declaration)
     }
 
-    if (declaration.getType().isUnion()) {
+    if (type.isUnion()) {
       return this.generateUnionMockClass(declaration);
     }
 
