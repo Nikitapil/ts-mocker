@@ -71,13 +71,9 @@ export class MockGenerator {
     }, {})
   }
 
-  private getSourceEnumNames() {
-    return Object.keys(this.enums)
-  }
-
   public generate(): string {
     const fakerImport = `import { faker } from '@faker-js/faker';\n\n`
-    const sourceDeclarationsNames: string[] = [...this.getSourceEnumNames()];
+    const sourceDeclarationsNames: string[] = [...Object.keys(this.enums)];
     let output = '';
 
     this.sourceFile.getInterfaces().forEach((interfaceDecl) => {
