@@ -112,15 +112,7 @@ export class MockGenerator {
   }
 
   private generateArrayTypeMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
-    const name = declaration.getName();
-
-    return `
-export class ${name}Mock {
-  public static create(override: ${name} = []): ${name} {
-    return override
-   }
-}
-`
+    return getTypeClassTemplate(declaration.getName(), '[]')
   }
 
 
