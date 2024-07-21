@@ -30,6 +30,7 @@ export type Key = {
 }
 export type NestedKey = {
   key: Key
+  nestedKey: NestedKey
 }
 
 export type SuperNestedKey = {
@@ -123,6 +124,8 @@ export interface CreateUserDto {
   keys: Key[];
 
   messages: Message[];
+
+  userDto: CreateUserDto
 
   children: {
     males: number,

@@ -73,6 +73,7 @@ export class CreateUserDtoMock {
       texts: [faker.lorem.word(), faker.lorem.word()],
       keys: [KeyMock.create(), KeyMock.create()],
       messages: [MessageMock.create(), MessageMock.create()],
+      userDto: CreateUserDtoMock.create(),
       children: {
         males: faker.number.int(),
         girls: faker.number.int(),
@@ -307,6 +308,7 @@ export class NestedKeyMock {
   public static create(overrides: Partial<NestedKey> = {}): NestedKey {
     return {
       key: KeyMock.create(),
+      nestedKey: NestedKeyMock.create(),
       ...overrides
     };
   }
