@@ -118,27 +118,12 @@ export class ${name}Mock {
 `
   }
 
-  private generateLiteralMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
-    const type = declaration.getType()
+  private generateTypeClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
     const name = declaration.getName();
-    let value = type.getLiteralValue() || type.getText()
-    if (type.isStringLiteral()) {
-      value = `"${value}"`
-    }
+    const value = this.generateMockValue(declaration.getType(), name)
     return `
 export class ${name}Mock {
   public static create(override: ${name} = ${value}): ${name} {
-    return override
-   }
-}\n
-`
-  }
-
-  private generateDateMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
-    const name = declaration.getName();
-    return `
-export class ${name}Mock {
-  public static create(override: ${name} = faker.date.recent()): ${name} {
     return override
    }
 }\n
@@ -189,8 +174,15 @@ export class ${name}Mock {
       return this.generateTemplateLiteralMockClass(declaration)
     }
 
-    if (declaration.getType().isLiteral() || declaration.getType().isString()) {
-      return this.generateLiteralMockClass(declaration)
+    if (declaration.getType().isLiteral() ||
+        declaration.getType().isString() ||
+        declaration.getType().isNumber() ||
+        declaration.getType().isBoolean() ||
+        declaration.getType().isEnum() ||
+        declaration.getType().isAny() ||
+        declaration.getType().isBigInt()
+      ) {
+      return this.generateTypeClass(declaration)
     }
 
     if (declaration.getType().isUnion()) {
@@ -212,7 +204,10 @@ export class ${name}Mock {
     } else {
       const type = declaration.getType();
       if (type.getText() === 'Date') {
-        return this.generateDateMockClass(declaration)
+        return this.generateTypeClass(declaration)
+      }
+      if (type.getText() === 'BigInt') {
+        return this.generateTypeClass(declaration)
       }
       if (type.isObject()) {
         type.getProperties().forEach((prop) => {
@@ -246,7 +241,7 @@ export class ${name}Mock {
   private generateMockValue(typeNode: TypeNode | Type | undefined, typeName: string, objectLevel = 1): string {
     if (!typeNode) return 'undefined';
 
-    const typeText = typeNode.getText();
+    const typeText = this.getCleanTypeText(typeNode.getText());
 
     const type = typeNode instanceof TypeNode ? typeNode.getType() : typeNode;
       // check literal object type
@@ -302,6 +297,10 @@ export class ${name}Mock {
         return 'null';
       case 'undefined':
         return 'undefined';
+      case 'any':
+        return 'undefined';
+      case 'BigInt':
+        return 'faker.number.bigInt()';
       default:
         if (typeText.startsWith('Array<') || typeText.endsWith('[]')) {
           const innerType = typeText

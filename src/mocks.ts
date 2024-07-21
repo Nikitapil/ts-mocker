@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, UserStatus, YesType, NoType, Bool, WordType, NumberType, NumberUnionType, StringLiteral, RandomUn, ArrType, HardUnionType, DateType, StrOrNum, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
+import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, UserStatus, YesType, NoType, Bool, WordType, NumberType, NumberUnionType, StringLiteral, RandomUn, ArrType, HardUnionType, DateType, StringType, StrOrNum, numberTypeNative, EnumType, AnyType, BigIntType, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
 
 export class CreateUserDtoMock {
   public static create(overrides: Partial<CreateUserDto> = {}): CreateUserDto {
@@ -136,7 +136,7 @@ export class NoTypeMock {
 
 
 export class BoolMock {
-  public static create(override: Bool = false): Bool {
+  public static create(override: Bool = faker.datatype.boolean()): Bool {
     return override
    }
 }
@@ -171,7 +171,7 @@ export class StringLiteralMock {
 
 
 export class RandomUnMock {
-  public static create(override: RandomUn = false): RandomUn {
+  public static create(override: RandomUn = RandomUnMock.create()): RandomUn {
     return override
    }
 }
@@ -198,8 +198,43 @@ export class DateTypeMock {
 }
 
 
+export class StringTypeMock {
+  public static create(override: StringType = faker.lorem.word()): StringType {
+    return override
+   }
+}
+
+
 export class StrOrNumMock {
   public static create(override: StrOrNum = faker.lorem.word()): StrOrNum {
+    return override
+   }
+}
+
+
+export class numberTypeNativeMock {
+  public static create(override: numberTypeNative = faker.number.int()): numberTypeNative {
+    return override
+   }
+}
+
+
+export class EnumTypeMock {
+  public static create(override: EnumType = UserRolesEnum.User): EnumType {
+    return override
+   }
+}
+
+
+export class AnyTypeMock {
+  public static create(override: AnyType = undefined): AnyType {
+    return override
+   }
+}
+
+
+export class BigIntTypeMock {
+  public static create(override: BigIntType = faker.number.bigInt()): BigIntType {
     return override
    }
 }

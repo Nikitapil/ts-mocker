@@ -22,8 +22,12 @@ export type RandomUn = YesType | NoType
 export type ArrType = NumberUnionType[]
 export type HardUnionType = Message | SuccessMessageDto
 export type DateType = Date
-// export type StringType = string
+export type StringType = string
 export type StrOrNum = string | number
+export type numberTypeNative = number
+export type EnumType = UserRolesEnum
+export type AnyType = any
+export type BigIntType = BigInt
 
 export type Key = {
   id: number
