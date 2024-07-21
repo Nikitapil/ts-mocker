@@ -88,6 +88,8 @@ export interface CreateUserDto {
 
   stringLiteralNested: 'stringLiteral'
 
+  stringTemplateliteralNested: `${string}nested${number}`
+
   stringLiteral: StringLiteral
 
   randomUnion: RandomUn

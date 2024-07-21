@@ -117,7 +117,6 @@ export class MockGenerator {
     const type = declaration.getType();
     const name = declaration.getName();
     const value = replaceBracketValues(type.getText(), (val) => this.handleTypeText(val, name))
-
     return getTypeClassTemplate(name, value)
   }
 
@@ -224,6 +223,11 @@ export class ${name}Mock {
     const typeText = this.getCleanTypeText(typeNode.getText());
 
     const type = typeNode instanceof TypeNode ? typeNode.getType() : typeNode;
+
+    // check templateLiteralTypes
+    if (type.isTemplateLiteral?.()) {
+      return replaceBracketValues(type.getText(), (val) => this.handleTypeText(val, typeName))
+    }
 
       // check literal object type
       if (type.isObject?.() && !this.getExistingInterfaceOrType(typeText) && !this.isGlobalType(typeText) && !type.isArray()) {
