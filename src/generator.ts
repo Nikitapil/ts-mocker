@@ -76,28 +76,23 @@ export class MockGenerator {
     const sourceDeclarationsNames: string[] = [...Object.keys(this.enums)];
     let output = '';
 
-    this.sourceFile.getInterfaces().forEach((interfaceDecl) => {
-      sourceDeclarationsNames.push(interfaceDecl.getName());
-      output += this.generateMockClass(interfaceDecl);
-    });
 
-    this.sourceFile.getTypeAliases().forEach((typeAlias) => {
+    [...this.sourceFile.getInterfaces(), ...this.sourceFile.getTypeAliases()].forEach((typeAlias) => {
       sourceDeclarationsNames.push(
         typeAlias.getName()
       );
       output += this.generateMockClass(typeAlias);
     });
-    const imports = [fakerImport, this.prepareTypesImports(sourceDeclarationsNames)]
+
+    const typeImports = `import { \n  ${ sourceDeclarationsNames.join(',\n  ') } \n} from '${
+      path.relative(path.dirname(this.outputPath), this.sourcePath)
+    }';\n\n`
+
+    const imports = [fakerImport, typeImports]
     output = imports.join('') + output;
 
     fs.writeFileSync(this.outputPath, output);
     return output;
-  }
-
-  private prepareTypesImports(typesNames: string[]) {
-    return `import { \n  ${ typesNames.join(',\n  ') } \n} from '${
-      path.relative(path.dirname(this.outputPath), this.sourcePath)
-    }';\n\n`
   }
 
   private generateUnionMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
