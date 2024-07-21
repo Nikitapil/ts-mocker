@@ -9,6 +9,7 @@ import {
 } from 'ts-morph';
 import * as path from "node:path";
 import {replaceBracketValues} from "./utils.ts";
+import {getTypeClassTemplate} from "./classes-templates.ts";
 
 type MockGeneratorOptions = {
   filePath: string,
@@ -97,21 +98,13 @@ export class MockGenerator {
 
   private generateUnionMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
     const name = declaration.getName();
+
     const unions = declaration.getType().getUnionTypes().map(t => {
       const typeText = t.getText()
-      const handled = this.handleTypeText(typeText, name)
-      return handled === 'undefined' ? typeText : handled;
+      return this.handleTypeText(typeText, name)
     })
-    if (!unions.length) {
-      throw new Error('Not unions in the type')
-    }
-    return `
-export class ${name}Mock {
-  public static create(override: ${name} = ${unions[0]}): ${name} {
-    return override
-   }
-}
-`
+
+    return getTypeClassTemplate(name, unions[0])
   }
 
   private generateTypeClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
