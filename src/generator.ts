@@ -111,13 +111,6 @@ export class MockGenerator {
     return getTypeClassTemplate(name, value)
   }
 
-  private generateTemplateLiteralMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
-    const type = declaration.getType();
-    const name = declaration.getName();
-    const value = replaceBracketValues(type.getText(), (val) => this.handleTypeText(val, name))
-    return getTypeClassTemplate(name, value)
-  }
-
   private generateArrayTypeMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
     const name = declaration.getName();
 
@@ -140,10 +133,6 @@ export class ${name}Mock {
         return this.generateArrayTypeMockClass(declaration)
     }
 
-    if (declaration.getType().isTemplateLiteral()) {
-      return this.generateTemplateLiteralMockClass(declaration)
-    }
-
     if (declaration.getType().isLiteral() ||
         declaration.getType().isString() ||
         declaration.getType().isNumber() ||
@@ -151,7 +140,8 @@ export class ${name}Mock {
         declaration.getType().isEnum() ||
         declaration.getType().isAny() ||
         declaration.getType().isBigInt() ||
-        declaration.getType().isUnknown()
+        declaration.getType().isUnknown() ||
+        declaration.getType().isTemplateLiteral()
       ) {
       return this.generateTypeClass(declaration)
     }
