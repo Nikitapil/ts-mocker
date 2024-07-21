@@ -15,6 +15,12 @@ type MockGeneratorOptions = {
   propertiesRules?: Record<string, string>
   typeRules?: Record<string, string>
 }
+// todo move this to utils file
+const replaceBracketValues = (str: string, callback: (value: string, index: number, array: string[]) => string) => {
+  const values = [...str.matchAll(/\{([^{}]+)\}/g)].map(match => match[1]);
+  const replacedValues = values.map(callback);
+  return values.reduce((acc, value, index) => acc.replace(value, replacedValues[index]), str);
+}
 
 class MockGenerator {
   private project: Project;
@@ -94,14 +100,60 @@ class MockGenerator {
   }
 
   private generateUnionMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
-    const unions = declaration.getType().getUnionTypes().map(t => t.getText())
     const name = declaration.getName();
+    const unions = declaration.getType().getUnionTypes().map(t => {
+      const typeText = t.getText()
+      const handled = this.handleTypeText(typeText, name)
+      return handled === 'undefined' ? typeText : handled;
+    })
     if (!unions.length) {
       throw new Error('Not unions in the type')
     }
     return `
 export class ${name}Mock {
   public static create(override: ${name} = ${unions[0]}): ${name} {
+    return override
+   }
+}\n
+`
+  }
+
+  private generateLiteralMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
+    const type = declaration.getType()
+    const name = declaration.getName();
+    let value = type.getLiteralValue() || type.getText()
+    if (type.isStringLiteral()) {
+      value = `"${value}"`
+    }
+    return `
+export class ${name}Mock {
+  public static create(override: ${name} = ${value}): ${name} {
+    return override
+   }
+}\n
+`
+  }
+
+  private generateTemplateLiteralMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
+    const type = declaration.getType();
+    const name = declaration.getName();
+    const value = replaceBracketValues(type.getText(), (val) => this.handleTypeText(val, name))
+
+    return `
+export class ${name}Mock {
+  public static create(override: ${name} = ${value}): ${name} {
+    return override
+   }
+}\n
+`
+  }
+
+  private generateArrayTypeMockClass(declaration: InterfaceDeclaration | TypeAliasDeclaration) {
+    const name = declaration.getName();
+
+    return `
+export class ${name}Mock {
+  public static create(override: ${name} = []): ${name} {
     return override
    }
 }\n
@@ -118,10 +170,23 @@ export class ${name}Mock {
     }
     this.generatedTypes.add(name);
 
-    const overrideType = `Partial<${name}>`;
+    if (declaration.getType().isArray()) {
+        return this.generateArrayTypeMockClass(declaration)
+    }
+
+    if (declaration.getType().isTemplateLiteral()) {
+      return this.generateTemplateLiteralMockClass(declaration)
+    }
+
+    if (declaration.getType().isLiteral()) {
+      return this.generateLiteralMockClass(declaration)
+    }
+
     if (declaration.getType().isUnion()) {
       return this.generateUnionMockClass(declaration);
     }
+
+    const overrideType = `Partial<${name}>`;
     let output = `export class ${name}Mock {\n`;
     output += `  public static create(overrides: ${overrideType} = {}): ${name} {\n`;
     output += `    return {\n`;

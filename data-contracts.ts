@@ -11,6 +11,17 @@
 
 export type UserStatus = 'active' | 'inactive' | 'archived' | 'blocked';
 
+export type YesType = true
+export type NoType = false
+export type Bool = boolean
+export type WordType = 'word'
+export type NumberType = 1
+export type NumberUnionType = 2 | 3 | 4
+export type StringLiteral = `${string}Qwe${number}`
+export type RandomUn = YesType | NoType
+export type ArrType = NumberUnionType[]
+export type HardUnionType = Message | SuccessMessageDto
+
 export type Key = {
   id: number
   value: string

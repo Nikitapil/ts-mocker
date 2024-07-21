@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, UserStatus, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
+import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, UserStatus, YesType, NoType, Bool, WordType, NumberType, NumberUnionType, StringLiteral, RandomUn, ArrType, HardUnionType, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
 
 export class CreateUserDtoMock {
   public static create(overrides: Partial<CreateUserDto> = {}): CreateUserDto {
@@ -99,6 +99,76 @@ export class RestorePasswordDtoMock {
 
 export class UserStatusMock {
   public static create(override: UserStatus = "active"): UserStatus {
+    return override
+   }
+}
+
+
+export class YesTypeMock {
+  public static create(override: YesType = true): YesType {
+    return override
+   }
+}
+
+
+export class NoTypeMock {
+  public static create(override: NoType = false): NoType {
+    return override
+   }
+}
+
+
+export class BoolMock {
+  public static create(override: Bool = false): Bool {
+    return override
+   }
+}
+
+
+export class WordTypeMock {
+  public static create(override: WordType = "word"): WordType {
+    return override
+   }
+}
+
+
+export class NumberTypeMock {
+  public static create(override: NumberType = 1): NumberType {
+    return override
+   }
+}
+
+
+export class NumberUnionTypeMock {
+  public static create(override: NumberUnionType = 2): NumberUnionType {
+    return override
+   }
+}
+
+
+export class StringLiteralMock {
+  public static create(override: StringLiteral = `${faker.lorem.word()}Qwe${faker.number.int()}`): StringLiteral {
+    return override
+   }
+}
+
+
+export class RandomUnMock {
+  public static create(override: RandomUn = false): RandomUn {
+    return override
+   }
+}
+
+
+export class ArrTypeMock {
+  public static create(override: ArrType = []): ArrType {
+    return override
+   }
+}
+
+
+export class HardUnionTypeMock {
+  public static create(override: HardUnionType = MessageMock.create()): HardUnionType {
     return override
    }
 }
