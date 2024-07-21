@@ -9,7 +9,7 @@ import {
 } from 'ts-morph';
 import * as path from "node:path";
 import {replaceBracketValues} from "./utils.ts";
-import {getTypeClassTemplate} from "./classes-templates.ts";
+import {getObjectValuesTemplate, getTypeClassTemplate} from "./classes-templates.ts";
 
 type MockGeneratorOptions = {
   filePath: string,
@@ -151,14 +151,13 @@ export class MockGenerator {
     output += `    return {\n`;
 
     if (declaration instanceof InterfaceDeclaration) {
-      declaration.getProperties().forEach((prop) => {
-        output += `      ${prop.getName()}: ${this.generateMockValue(
-          prop.getTypeNode(),
-          prop.getName()
-        )},\n`;
-      });
+      const objValues = declaration.getProperties().reduce((acc: Record<string, string>, prop) => {
+        const name = prop.getName();
+        acc[name] = this.generateMockValue(prop.getTypeNode(), name)
+        return acc
+      }, {})
+      output += getObjectValuesTemplate(objValues)
     } else {
-      const type = declaration.getType();
       if (type.getText() === 'Date') {
         return this.generateTypeClass(declaration)
       }
@@ -166,17 +165,12 @@ export class MockGenerator {
         return this.generateTypeClass(declaration)
       }
       if (type.isObject()) {
-        type.getProperties().forEach((prop) => {
-          output += `      ${prop.getName()}: ${this.generateMockValue(
-            prop.getValueDeclaration()?.getType(),
-            prop.getName()
-          )},\n`;
-        });
-      } else {
-        output += `      ${this.generateMockValue(
-          declaration.getTypeNode(),
-          declaration.getTypeNode()?.getText() || ''
-        )}\n`;
+        const objValues = type.getProperties().reduce((acc: Record<string, string>, prop) => {
+          const name = prop.getName();
+          acc[name] = this.generateMockValue(prop.getValueDeclaration()?.getType(), name)
+          return acc
+        }, {})
+        output += getObjectValuesTemplate(objValues)
       }
     }
 
