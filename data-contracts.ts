@@ -23,6 +23,7 @@ export type AnyType = any
 export type BigIntType = BigInt
 export type ClassType = WelcomeClass
 export type UnknownType = unknown
+export type RecordType = Record<string, number>
 
 export type Key = {
   id: number

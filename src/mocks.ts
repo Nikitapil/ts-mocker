@@ -29,6 +29,7 @@ import {
   BigIntType,
   ClassType,
   UnknownType,
+  RecordType,
   Key,
   NestedKey,
   SuperNestedKey,
@@ -292,6 +293,14 @@ export class UnknownTypeMock {
   public static create(override: UnknownType = undefined): UnknownType {
     return override
    }
+}
+
+export class RecordTypeMock {
+  public static create(overrides: RecordType = {}): RecordType {
+    return {
+      ...overrides
+    };
+  }
 }
 
 export class KeyMock {

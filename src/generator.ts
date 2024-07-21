@@ -190,7 +190,9 @@ export class ${name}Mock {
       return this.generateUnionMockClass(declaration);
     }
 
-    const overrideType = `Partial<${name}>`;
+    const isPartial = !declaration.getType().getText().includes('Record')
+
+    const overrideType = isPartial ? `Partial<${name}>` : name;
     let output = `export class ${name}Mock {\n`;
     output += `  public static create(overrides: ${overrideType} = {}): ${name} {\n`;
     output += `    return {\n`;
