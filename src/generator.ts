@@ -21,7 +21,6 @@ type MockGeneratorOptions = {
 export class MockGenerator {
   private project: Project;
   private sourceFile: SourceFile;
-  private generatedTypes: Set<string>;
   private readonly sourcePath: string;
   private readonly enums: Record<string, string[]>;
   private readonly outputPath: string;
@@ -43,7 +42,6 @@ export class MockGenerator {
   constructor({ filePath, outputPath = 'generated_mocks.ts', propertiesRules = {}, typeRules = {} }: MockGeneratorOptions) {
     this.project = new Project();
     this.sourceFile = this.project.addSourceFileAtPath(filePath);
-    this.generatedTypes = new Set();
     this.sourcePath = filePath;
     this.outputPath = outputPath;
     this.enums = this.prepareEnums();
@@ -137,10 +135,6 @@ export class ${name}Mock {
     declaration: InterfaceDeclaration | TypeAliasDeclaration
   ): string {
     const name = declaration.getName();
-    if (this.generatedTypes.has(name)) {
-      return ''; // Skip if already generated
-    }
-    this.generatedTypes.add(name);
 
     if (declaration.getType().isArray()) {
         return this.generateArrayTypeMockClass(declaration)
