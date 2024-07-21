@@ -114,7 +114,7 @@ export class ${name}Mock {
   public static create(override: ${name} = ${unions[0]}): ${name} {
     return override
    }
-}\n
+}
 `
   }
 
@@ -126,7 +126,7 @@ export class ${name}Mock {
   public static create(override: ${name} = ${value}): ${name} {
     return override
    }
-}\n
+}
 `
   }
 
@@ -140,7 +140,7 @@ export class ${name}Mock {
   public static create(override: ${name} = ${value}): ${name} {
     return override
    }
-}\n
+}
 `
   }
 
@@ -152,7 +152,7 @@ export class ${name}Mock {
   public static create(override: ${name} = []): ${name} {
     return override
    }
-}\n
+}
 `
   }
 

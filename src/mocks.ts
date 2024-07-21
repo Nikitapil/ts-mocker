@@ -160,13 +160,11 @@ export class UserStatusMock {
    }
 }
 
-
 export class YesTypeMock {
   public static create(override: YesType = true): YesType {
     return override
    }
 }
-
 
 export class NoTypeMock {
   public static create(override: NoType = false): NoType {
@@ -174,13 +172,11 @@ export class NoTypeMock {
    }
 }
 
-
 export class BoolMock {
   public static create(override: Bool = faker.datatype.boolean()): Bool {
     return override
    }
 }
-
 
 export class WordTypeMock {
   public static create(override: WordType = "word"): WordType {
@@ -188,13 +184,11 @@ export class WordTypeMock {
    }
 }
 
-
 export class NumberTypeMock {
   public static create(override: NumberType = 1): NumberType {
     return override
    }
 }
-
 
 export class NumberUnionTypeMock {
   public static create(override: NumberUnionType = 2): NumberUnionType {
@@ -202,13 +196,11 @@ export class NumberUnionTypeMock {
    }
 }
 
-
 export class StringLiteralMock {
   public static create(override: StringLiteral = `${faker.lorem.word()}Qwe${faker.number.int()}`): StringLiteral {
     return override
    }
 }
-
 
 export class RandomUnMock {
   public static create(override: RandomUn = RandomUnMock.create()): RandomUn {
@@ -216,13 +208,11 @@ export class RandomUnMock {
    }
 }
 
-
 export class ArrTypeMock {
   public static create(override: ArrType = []): ArrType {
     return override
    }
 }
-
 
 export class HardUnionTypeMock {
   public static create(override: HardUnionType = MessageMock.create()): HardUnionType {
@@ -230,13 +220,11 @@ export class HardUnionTypeMock {
    }
 }
 
-
 export class DateTypeMock {
   public static create(override: DateType = faker.date.recent()): DateType {
     return override
    }
 }
-
 
 export class StringTypeMock {
   public static create(override: StringType = faker.lorem.word()): StringType {
@@ -244,13 +232,11 @@ export class StringTypeMock {
    }
 }
 
-
 export class StrOrNumMock {
   public static create(override: StrOrNum = faker.lorem.word()): StrOrNum {
     return override
    }
 }
-
 
 export class numberTypeNativeMock {
   public static create(override: numberTypeNative = faker.number.int()): numberTypeNative {
@@ -258,13 +244,11 @@ export class numberTypeNativeMock {
    }
 }
 
-
 export class EnumTypeMock {
   public static create(override: EnumType = UserRolesEnum.User): EnumType {
     return override
    }
 }
-
 
 export class AnyTypeMock {
   public static create(override: AnyType = undefined): AnyType {
@@ -272,13 +256,11 @@ export class AnyTypeMock {
    }
 }
 
-
 export class BigIntTypeMock {
   public static create(override: BigIntType = faker.number.bigInt()): BigIntType {
     return override
    }
 }
-
 export class ClassTypeMock {
   public static create(overrides: Partial<ClassType> = {}): ClassType {
     return {
@@ -294,7 +276,6 @@ export class UnknownTypeMock {
     return override
    }
 }
-
 export class RecordTypeMock {
   public static create(overrides: RecordType = {}): RecordType {
     return {
