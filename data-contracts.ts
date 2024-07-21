@@ -23,6 +23,7 @@ export type ArrType = NumberUnionType[]
 export type HardUnionType = Message | SuccessMessageDto
 export type DateType = Date
 // export type StringType = string
+export type StrOrNum = string | number
 
 export type Key = {
   id: number

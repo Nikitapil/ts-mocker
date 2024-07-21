@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, UserStatus, YesType, NoType, Bool, WordType, NumberType, NumberUnionType, StringLiteral, RandomUn, ArrType, HardUnionType, DateType, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
+import { UserRolesEnum, CreateUserDto, UserReturnDto, AuthResponseDto, LoginUserDto, SuccessMessageDto, GetRestoreKeyDto, RestorePasswordDto, UserStatus, YesType, NoType, Bool, WordType, NumberType, NumberUnionType, StringLiteral, RandomUn, ArrType, HardUnionType, DateType, StrOrNum, Key, NestedKey, SuperNestedKey, Message } from '../data-contracts.ts';
 
 export class CreateUserDtoMock {
   public static create(overrides: Partial<CreateUserDto> = {}): CreateUserDto {
@@ -193,6 +193,13 @@ export class HardUnionTypeMock {
 
 export class DateTypeMock {
   public static create(override: DateType = faker.date.recent()): DateType {
+    return override
+   }
+}
+
+
+export class StrOrNumMock {
+  public static create(override: StrOrNum = faker.lorem.word()): StrOrNum {
     return override
    }
 }
