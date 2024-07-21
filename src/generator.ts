@@ -9,7 +9,7 @@ import {
 } from 'ts-morph';
 import * as path from "node:path";
 import {replaceBracketValues} from "./utils.ts";
-import {getObjectValuesTemplate, getTypeClassTemplate} from "./classes-templates.ts";
+import {getObjectTypeClassTemplate, getTypeClassTemplate} from "./classes-templates.ts";
 
 type MockGeneratorOptions = {
   filePath: string,
@@ -85,7 +85,7 @@ export class MockGenerator {
 
     const typeImports = `import { \n  ${ sourceDeclarationsNames.join(',\n  ') } \n} from '${
       path.relative(path.dirname(this.outputPath), this.sourcePath)
-    }';\n\n`
+    }';\n`
 
     const imports = [fakerImport, typeImports]
     output = imports.join('') + output;
@@ -121,6 +121,8 @@ export class MockGenerator {
   ): string {
     const name = declaration.getName();
     const type = declaration.getType();
+    const text = type.getText()
+    const commonObjTypes = ['Date', 'BigInt']
 
     if (type.isArray()) {
         return this.generateArrayTypeMockClass(declaration)
@@ -134,7 +136,8 @@ export class MockGenerator {
         type.isAny() ||
         type.isBigInt() ||
         type.isUnknown() ||
-        type.isTemplateLiteral()
+        type.isTemplateLiteral() ||
+        commonObjTypes.includes(text)
       ) {
       return this.generateTypeClass(declaration)
     }
@@ -145,41 +148,23 @@ export class MockGenerator {
 
     const isPartial = !declaration.getType().getText().includes('Record')
 
-    const overrideType = isPartial ? `Partial<${name}>` : name;
-    let output = `export class ${name}Mock {\n`;
-    output += `  public static create(overrides: ${overrideType} = {}): ${name} {\n`;
-    output += `    return {\n`;
+    let objValues = {}
 
     if (declaration instanceof InterfaceDeclaration) {
-      const objValues = declaration.getProperties().reduce((acc: Record<string, string>, prop) => {
+      objValues = declaration.getProperties().reduce((acc: Record<string, string>, prop) => {
         const name = prop.getName();
         acc[name] = this.generateMockValue(prop.getTypeNode(), name)
         return acc
       }, {})
-      output += getObjectValuesTemplate(objValues)
     } else {
-      if (type.getText() === 'Date') {
-        return this.generateTypeClass(declaration)
-      }
-      if (type.getText() === 'BigInt') {
-        return this.generateTypeClass(declaration)
-      }
-      if (type.isObject()) {
-        const objValues = type.getProperties().reduce((acc: Record<string, string>, prop) => {
-          const name = prop.getName();
-          acc[name] = this.generateMockValue(prop.getValueDeclaration()?.getType(), name)
-          return acc
-        }, {})
-        output += getObjectValuesTemplate(objValues)
-      }
+      objValues = type.getProperties().reduce((acc: Record<string, string>, prop) => {
+        const name = prop.getName();
+        acc[name] = this.generateMockValue(prop.getValueDeclaration()?.getType(), name)
+        return acc
+      }, {})
     }
 
-    output += `      ...overrides\n`;
-    output += `    };\n`;
-    output += `  }\n`;
-    output += `}\n\n`;
-
-    return output;
+    return getObjectTypeClassTemplate({ name, values: objValues, isRecordType: isPartial });
   }
 
   //check if is Common type

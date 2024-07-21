@@ -154,7 +154,6 @@ export class RestorePasswordDtoMock {
   }
 }
 
-
 export class UserStatusMock {
   public static create(override: UserStatus = "active"): UserStatus {
     return override
@@ -262,6 +261,7 @@ export class BigIntTypeMock {
     return override
    }
 }
+
 export class ClassTypeMock {
   public static create(overrides: Partial<ClassType> = {}): ClassType {
     return {
@@ -271,15 +271,16 @@ export class ClassTypeMock {
   }
 }
 
-
 export class UnknownTypeMock {
   public static create(override: UnknownType = undefined): UnknownType {
     return override
    }
 }
+
 export class RecordTypeMock {
   public static create(overrides: RecordType = {}): RecordType {
     return {
+
       ...overrides
     };
   }
@@ -329,4 +330,3 @@ export class MessageMock {
     };
   }
 }
-
