@@ -8,8 +8,8 @@ import {
   Type, PropertySignature
 } from 'ts-morph';
 import * as path from "node:path";
-import {replaceBracketValues} from "./utils.ts";
-import {getObjectTypeClassTemplate, getObjectValuesTemplate, getTypeClassTemplate} from "./classes-templates.ts";
+import { replaceBracketValues } from "./utils.ts";
+import { getObjectTypeClassTemplate, getObjectValuesTemplate, getTypeClassTemplate } from "./classes-templates.ts";
 
 type MockGeneratorOptions = {
   filePath: string,
@@ -224,23 +224,24 @@ export class MockGenerator {
       return result === 'undefined' ? textType : result
     }
 
-        if (typeText.startsWith('Array<') || typeText.endsWith('[]')) {
-          const innerType = typeText
-            .replace('Array<', '')
-            .replace('[]', '')
-            .replace('>', '');
-          return `[${this.handleTypeText(innerType, innerType)}, ${this.handleTypeText(
-            innerType,
-            innerType
-          )}]`;
-        }
-        // Check if it's a nested type from the same file
-        if (
-          this.getExistingInterfaceOrType(typeText)
-        ) {
-          return `${this.getCleanTypeText(typeText)}Mock.create()`;
-        }
-        return typeText; // For unknown types
+    if (typeText.startsWith('Array<') || typeText.endsWith('[]')) {
+      const innerType = typeText
+        .replace('Array<', '')
+        .replace('[]', '')
+        .replace('>', '');
+      return `[${this.handleTypeText(innerType, innerType)}, ${this.handleTypeText(
+        innerType,
+        innerType
+      )}]`;
+    }
+    // Check if it's a nested type from the same file
+    if (
+      this.getExistingInterfaceOrType(typeText)
+    ) {
+      return `${this.getCleanTypeText(typeText)}Mock.create()`;
+    }
+    // For unknown types
+    return typeText;
   }
 }
 
