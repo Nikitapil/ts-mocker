@@ -5,7 +5,7 @@ import {
   InterfaceDeclaration,
   TypeAliasDeclaration,
   TypeNode,
-  Type
+  Type, PropertySignature
 } from 'ts-morph';
 import * as path from "node:path";
 import {replaceBracketValues} from "./utils.ts";
@@ -147,22 +147,15 @@ export class MockGenerator {
     }
 
     const isPartial = !declaration.getType().getText().includes('Record')
+    const isInterface = declaration instanceof InterfaceDeclaration
+    const properties = isInterface ? declaration.getProperties() : type.getProperties()
 
-    let objValues = {}
-
-    if (declaration instanceof InterfaceDeclaration) {
-      objValues = declaration.getProperties().reduce((acc: Record<string, string>, prop) => {
-        const name = prop.getName();
-        acc[name] = this.generateMockValue(prop.getTypeNode(), name)
-        return acc
-      }, {})
-    } else {
-      objValues = type.getProperties().reduce((acc: Record<string, string>, prop) => {
-        const name = prop.getName();
-        acc[name] = this.generateMockValue(prop.getValueDeclaration()?.getType(), name)
-        return acc
-      }, {})
-    }
+    const objValues = properties.reduce((acc: Record<string, string>, prop) => {
+      const name = prop.getName();
+      const propType = prop instanceof PropertySignature ? prop.getTypeNode() : prop.getValueDeclaration()?.getType()
+      acc[name] = this.generateMockValue(propType, name)
+      return acc
+    }, {})
 
     return getObjectTypeClassTemplate({ name, values: objValues, isRecordType: isPartial });
   }
