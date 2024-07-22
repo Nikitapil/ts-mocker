@@ -5,11 +5,16 @@ interface IGetObjectTypeClassTemplateParams {
 }
 
 export const getTypeClassTemplate = (name: string, defaultValue: string) => {
+  const overrideText = `override: ${name} = ${defaultValue}`
   return `
 export class ${name}Mock {
-  public static create(override: ${name} = ${defaultValue}): ${name} {
+  public static create(${overrideText}): ${name} {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, ${overrideText}): ${name}[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 `
 }

@@ -157,109 +157,181 @@ export class RestorePasswordDtoMock {
 export class UserStatusMock {
   public static create(override: UserStatus = "active"): UserStatus {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: UserStatus = "active"): UserStatus[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class YesTypeMock {
   public static create(override: YesType = true): YesType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: YesType = true): YesType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class NoTypeMock {
   public static create(override: NoType = false): NoType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: NoType = false): NoType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class BoolMock {
   public static create(override: Bool = faker.datatype.boolean()): Bool {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: Bool = faker.datatype.boolean()): Bool[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class WordTypeMock {
   public static create(override: WordType = "word"): WordType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: WordType = "word"): WordType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class NumberTypeMock {
   public static create(override: NumberType = 1): NumberType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: NumberType = 1): NumberType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class NumberUnionTypeMock {
   public static create(override: NumberUnionType = 2): NumberUnionType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: NumberUnionType = 2): NumberUnionType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class StringLiteralMock {
   public static create(override: StringLiteral = `${faker.lorem.word()}Qwe${faker.number.int()}`): StringLiteral {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: StringLiteral = `${faker.lorem.word()}Qwe${faker.number.int()}`): StringLiteral[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class RandomUnMock {
   public static create(override: RandomUn = RandomUnMock.create()): RandomUn {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: RandomUn = RandomUnMock.create()): RandomUn[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class ArrTypeMock {
   public static create(override: ArrType = []): ArrType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: ArrType = []): ArrType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class HardUnionTypeMock {
   public static create(override: HardUnionType = MessageMock.create()): HardUnionType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: HardUnionType = MessageMock.create()): HardUnionType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class DateTypeMock {
   public static create(override: DateType = faker.date.recent()): DateType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: DateType = faker.date.recent()): DateType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class StringTypeMock {
   public static create(override: StringType = faker.lorem.word()): StringType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: StringType = faker.lorem.word()): StringType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class StrOrNumMock {
   public static create(override: StrOrNum = faker.lorem.word()): StrOrNum {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: StrOrNum = faker.lorem.word()): StrOrNum[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class numberTypeNativeMock {
   public static create(override: numberTypeNative = faker.number.int()): numberTypeNative {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: numberTypeNative = faker.number.int()): numberTypeNative[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class EnumTypeMock {
   public static create(override: EnumType = UserRolesEnum.User): EnumType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: EnumType = UserRolesEnum.User): EnumType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class AnyTypeMock {
   public static create(override: AnyType = undefined): AnyType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: AnyType = undefined): AnyType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class BigIntTypeMock {
   public static create(override: BigIntType = faker.number.bigInt()): BigIntType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: BigIntType = faker.number.bigInt()): BigIntType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class ClassTypeMock {
@@ -274,7 +346,11 @@ export class ClassTypeMock {
 export class UnknownTypeMock {
   public static create(override: UnknownType = undefined): UnknownType {
     return override
-   }
+  }
+  
+  public static createMany(count = 1, override: UnknownType = undefined): UnknownType[] {
+    return Array.from({ length: count }, () => this.create(override))  
+  } 
 }
 
 export class RecordTypeMock {
