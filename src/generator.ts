@@ -9,7 +9,7 @@ import {
 } from 'ts-morph';
 import * as path from "node:path";
 import {replaceBracketValues} from "./utils.ts";
-import {getObjectTypeClassTemplate, getTypeClassTemplate} from "./classes-templates.ts";
+import {getObjectTypeClassTemplate, getObjectValuesTemplate, getTypeClassTemplate} from "./classes-templates.ts";
 
 type MockGeneratorOptions = {
   filePath: string,
@@ -166,7 +166,7 @@ export class MockGenerator {
     return global.hasOwnProperty(typeText) || commontypes.includes(typeText)
   }
 
-  private generateMockValue(typeNode: TypeNode | Type | undefined, typeName: string, objectLevel = 1): string {
+  private generateMockValue(typeNode: TypeNode | Type | undefined, typeName: string, objectLevel = 2): string {
     if (!typeNode) return 'undefined';
 
     const typeText = this.getCleanTypeText(typeNode.getText());
@@ -181,15 +181,21 @@ export class MockGenerator {
       // check literal object type
       if (type.isObject?.() && !this.getExistingInterfaceOrType(typeText) && !this.isGlobalType(typeText) && !type.isArray()) {
         let result = '{\n'
-        type.getProperties().forEach((prop) => {
-          result+= `${' '.repeat(objectLevel)}       ${prop.getName()}: ${this.generateMockValue(
+
+        const objValues = type.getProperties().reduce((acc: Record<string, string>, prop) => {
+          const name = prop.getName()
+          acc[name] = this.generateMockValue(
             prop.getValueDeclaration()?.getType(),
-            prop.getName(),
+            name,
             objectLevel+2
-          )},\n`;
-        })
-        return result + `${' '.repeat(objectLevel)}      }`
+          )
+          return acc
+        }, {})
+
+        result += getObjectValuesTemplate(objValues, objectLevel)
+        return result + `\n${' '.repeat(objectLevel)}     }`
     }
+
     return this.handleTypeText(typeText, typeName);
   }
 
