@@ -235,21 +235,12 @@ export class MockGenerator {
       )}]`;
     }
     // Check if it's a nested type from the same file
-    if (
-      this.getExistingInterfaceOrType(typeText)
-    ) {
+    if (this.getExistingInterfaceOrType(typeText)) {
       return `${this.getCleanTypeText(typeText)}Mock.create()`;
     }
     // For unknown types
     return typeText;
   }
 }
-
-// Usage
-const filePath = path.resolve(process.cwd(), './data-contracts.ts');
-const outputPath = path.resolve(process.cwd(), `./src/mocks.ts`);
-const generator = new MockGenerator({filePath, outputPath });
-generator.generate();
-
 
 console.log('Mock classes generated successfully!');
