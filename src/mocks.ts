@@ -92,6 +92,10 @@ export class CreateUserDtoMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<CreateUserDto> = {}): CreateUserDto[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class UserReturnDtoMock {
@@ -104,6 +108,10 @@ export class UserReturnDtoMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<UserReturnDto> = {}): UserReturnDto[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class AuthResponseDtoMock {
@@ -114,6 +122,10 @@ export class AuthResponseDtoMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<AuthResponseDto> = {}): AuthResponseDto[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class LoginUserDtoMock {
@@ -124,6 +136,10 @@ export class LoginUserDtoMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<LoginUserDto> = {}): LoginUserDto[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class SuccessMessageDtoMock {
@@ -133,6 +149,10 @@ export class SuccessMessageDtoMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<SuccessMessageDto> = {}): SuccessMessageDto[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class GetRestoreKeyDtoMock {
@@ -142,6 +162,10 @@ export class GetRestoreKeyDtoMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<GetRestoreKeyDto> = {}): GetRestoreKeyDto[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class RestorePasswordDtoMock {
@@ -152,6 +176,10 @@ export class RestorePasswordDtoMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<RestorePasswordDto> = {}): RestorePasswordDto[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class UserStatusMock {
@@ -341,6 +369,10 @@ export class ClassTypeMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<ClassType> = {}): ClassType[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class UnknownTypeMock {
@@ -360,6 +392,10 @@ export class RecordTypeMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: RecordType = {}): RecordType[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class KeyMock {
@@ -370,6 +406,10 @@ export class KeyMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<Key> = {}): Key[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class NestedKeyMock {
@@ -380,6 +420,10 @@ export class NestedKeyMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<NestedKey> = {}): NestedKey[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class SuperNestedKeyMock {
@@ -390,6 +434,10 @@ export class SuperNestedKeyMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<SuperNestedKey> = {}): SuperNestedKey[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 
 export class MessageMock {
@@ -405,4 +453,8 @@ export class MessageMock {
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, overrides: Partial<Message> = {}): Message[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }

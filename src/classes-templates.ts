@@ -26,14 +26,19 @@ export const getObjectValuesTemplate = (values: Record<string, string>, objectLe
 
 export const getObjectTypeClassTemplate = ({name, values, isRecordType}: IGetObjectTypeClassTemplateParams) => {
   const overrideType = isRecordType ? `Partial<${name}>` : name;
+  const overrideText = `overrides: ${overrideType} = {}`
   return `
 export class ${name}Mock {
-  public static create(overrides: ${overrideType} = {}): ${name} {
+  public static create(${overrideText}): ${name} {
     return {
 ${getObjectValuesTemplate(values)}
       ...overrides
     };
   }
+  
+  public static createMany(count = 1, ${overrideText}): ${name}[] {
+    return Array.from({ length: count }, () => this.create(overrides))  
+  } 
 }
 `
 }
