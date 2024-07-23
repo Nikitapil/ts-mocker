@@ -83,7 +83,7 @@ export class MockGenerator {
       output += this.generateMockClass(typeAlias);
     });
 
-    const typeImports = `import { \n  ${ sourceDeclarationsNames.join(',\n  ') } \n} from '${
+    const typeImports = `import { \n  ${ sourceDeclarationsNames.join(',\n  ') } \n} from '${'./' +
       path.relative(path.dirname(this.outputPath), this.sourcePath)
     }';\n`
 
