@@ -10,11 +10,11 @@
     "example": "npx tsx ./src/example/generatorSetup"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.4.1",
     "typescript": "^5.2.2",
     "vite": "^5.3.4"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@types/node": "^20.14.11",
     "ts-morph": "^23.0.0"
   }
