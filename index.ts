@@ -1,0 +1,1 @@
+export { MockGenerator } from './src/generator'
