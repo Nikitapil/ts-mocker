@@ -10,13 +10,15 @@ import {
 import * as path from "node:path";
 import { replaceBracketValues } from "./utils.ts";
 import { getObjectTypeClassTemplate, getObjectValuesTemplate, getTypeClassTemplate } from "./classes-templates.ts";
+import {fa} from "@faker-js/faker";
 
 type MockGeneratorOptions = {
   filePath: string,
   outputPath?: string,
   propertiesRules?: Record<string, string>
   typeRules?: Record<string, string>
-  needImportsTypePrefix?: boolean
+  needImportsTypePrefix?: boolean,
+  allowImportingTsExtensions: boolean
 }
 
 export class MockGenerator {
@@ -29,6 +31,7 @@ export class MockGenerator {
     email: 'faker.internet.email()'
   };
   private readonly needImportsTypePrefix: boolean = false;
+  private readonly allowImportingTsExtensions: boolean = false;
   private readonly typeRules: Record<string, string> = {
     string: 'faker.lorem.word()',
     number: 'faker.number.int()',
@@ -41,13 +44,21 @@ export class MockGenerator {
     unknown: 'undefined',
   }
 
-  constructor({ filePath, outputPath = 'generated_mocks.ts', propertiesRules = {}, typeRules = {}, needImportsTypePrefix = false }: MockGeneratorOptions) {
+  constructor({
+    filePath,
+    outputPath = 'generated_mocks.ts',
+    propertiesRules = {},
+    typeRules = {},
+    needImportsTypePrefix = false ,
+    allowImportingTsExtensions = false
+  }: MockGeneratorOptions) {
     this.project = new Project();
     this.sourceFile = this.project.addSourceFileAtPath(filePath);
     this.sourcePath = filePath;
     this.outputPath = outputPath;
     this.enums = this.prepareEnums();
     this.needImportsTypePrefix = needImportsTypePrefix
+    this.allowImportingTsExtensions = allowImportingTsExtensions
     this.propertiesRules = {
       ...this.propertiesRules,
       ...propertiesRules
@@ -86,9 +97,13 @@ export class MockGenerator {
       output += this.generateMockClass(typeAlias);
     });
 
-    const typeImports = `import { \n  ${ sourceDeclarationsNames.join(',\n  ') } \n} from '${'./' +
+    let typeImports = `import { \n  ${ sourceDeclarationsNames.join(',\n  ') } \n} from '${'./' +
       path.relative(path.dirname(this.outputPath), this.sourcePath)
     }';\n`
+
+    if (!this.allowImportingTsExtensions) {
+      typeImports = typeImports.replace('.ts', '')
+    }
 
     const imports = [fakerImport, typeImports]
     output = imports.join('') + output;
