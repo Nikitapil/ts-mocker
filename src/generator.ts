@@ -91,6 +91,7 @@ export class MockGenerator {
     output = imports.join('') + output;
 
     fs.writeFileSync(this.outputPath, output);
+    console.log('Mock classes generated successfully!');
     return output;
   }
 
@@ -242,5 +243,3 @@ export class MockGenerator {
     return typeText;
   }
 }
-
-console.log('Mock classes generated successfully!');
