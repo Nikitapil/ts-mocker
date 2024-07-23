@@ -16,6 +16,7 @@ type MockGeneratorOptions = {
   outputPath?: string,
   propertiesRules?: Record<string, string>
   typeRules?: Record<string, string>
+  needImportsTypePrefix?: boolean
 }
 
 export class MockGenerator {
@@ -27,6 +28,7 @@ export class MockGenerator {
   private readonly propertiesRules: Record<string, string> = {
     email: 'faker.internet.email()'
   };
+  private readonly needImportsTypePrefix: boolean = false;
   private readonly typeRules: Record<string, string> = {
     string: 'faker.lorem.word()',
     number: 'faker.number.int()',
@@ -39,12 +41,13 @@ export class MockGenerator {
     unknown: 'undefined',
   }
 
-  constructor({ filePath, outputPath = 'generated_mocks.ts', propertiesRules = {}, typeRules = {} }: MockGeneratorOptions) {
+  constructor({ filePath, outputPath = 'generated_mocks.ts', propertiesRules = {}, typeRules = {}, needImportsTypePrefix = false }: MockGeneratorOptions) {
     this.project = new Project();
     this.sourceFile = this.project.addSourceFileAtPath(filePath);
     this.sourcePath = filePath;
     this.outputPath = outputPath;
     this.enums = this.prepareEnums();
+    this.needImportsTypePrefix = needImportsTypePrefix
     this.propertiesRules = {
       ...this.propertiesRules,
       ...propertiesRules
@@ -78,7 +81,7 @@ export class MockGenerator {
 
     [...this.sourceFile.getInterfaces(), ...this.sourceFile.getTypeAliases()].forEach((typeAlias) => {
       sourceDeclarationsNames.push(
-        typeAlias.getName()
+        (this.needImportsTypePrefix ? 'type ' : '') + typeAlias.getName()
       );
       output += this.generateMockClass(typeAlias);
     });
