@@ -10,7 +10,6 @@ import {
 import * as path from "node:path";
 import { replaceBracketValues } from "./utils.ts";
 import { getObjectTypeClassTemplate, getObjectValuesTemplate, getTypeClassTemplate } from "./classes-templates.ts";
-import {fa} from "@faker-js/faker";
 
 type MockGeneratorOptions = {
   filePath: string,

@@ -34,7 +34,7 @@ import {
   NestedKey,
   SuperNestedKey,
   Message 
-} from '../source-types.ts';
+} from './../source-types';
 
 export class CreateUserDtoMock {
   public static create(overrides: Partial<CreateUserDto> = {}): CreateUserDto {
