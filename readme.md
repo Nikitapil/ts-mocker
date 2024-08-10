@@ -63,5 +63,7 @@ export class UserReturnDtoMock {
 2. outputPath - path where to generated file with mock classes
 3. propertiesRules - object with specific rules of generation for your objects properties
 4. typeRules - object with specific rules of generation for your properties types
+5. needImportsTypePrefix - is typescript verbatimModuleSyntax is on
+6. allowImportingTsExtensions - is .ts extensions are allowed in imports
 
 To set propertiesRules or typeRules you can use [faker js api](https://fakerjs.dev/api/) and provide methods calls as strings or create your own specific rules
